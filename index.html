@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Kode Etik Profesi Pendidikan</title>
+    <link rel="stylesheet" href="tesaja.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <main>
+        <section id="halaman1" class="page-container active">
+            <h1>Aplikasi Kode Etik Profesi Pendidikan</h1>
+            <p>Untuk Guru dan Dosen sesuai Kode Etik Profesi Indonesia</p>
+            <img src="guru.jpg" alt="Ilustrasi Guru dan Dosen" class="illustration">
+            <div class="btn-container">
+                <button onclick="showHalaman('halaman2')" class="btn">Mulai Sekarang</button>
+            </div>
+        </section>
+
+        <section id="halaman2" class="page-container page">
+            <h2>Pilih Profesi Anda</h2>
+            <p>Silakan pilih profesi sesuai peran Anda dalam dunia pendidikan.</p>
+            <div class="options-grid">
+                <label class="option-card" for="profesi-guru">
+                    <input type="radio" name="profesi" id="profesi-guru" value="guru">
+                    <h3>Guru</h3>
+                    <p>Tenaga pendidik profesional untuk pendidikan dasar dan menengah.</p>
+                </label>
+                <label class="option-card" for="profesi-dosen">
+                    <input type="radio" name="profesi" id="profesi-dosen" value="dosen">
+                    <h3>Dosen</h3>
+                    <p>Pendidik profesional dan ilmuwan di perguruan tinggi.</p>
+                </label>
+            </div>
+            <div class="alert-message" id="profesi-alert">Silakan pilih salah satu profesi.</div>
+            <div class="btn-container">
+                <button class="btn btn-green" onclick="lanjutDataDiri()">Lanjut</button>
+                <button class="btn secondary" onclick="showHalaman('halaman1')">Kembali</button>
+            </div>
+        </section>
+
+        <section id="halaman3" class="page-container page">
+            <h2>Data Diri</h2>
+            <p>Silakan isi data diri Anda sebelum memulai kuis.</p>
+            <form id="dataDiriForm">
+                <div class="input-group">
+                    <label for="nama">Nama Lengkap</label>
+                    <input type="text" id="nama" placeholder="Masukkan nama Anda" required>
+                </div>
+                <div class="input-group">
+                    <label for="institusi">Institusi Pendidikan (Sekolah/Kampus)</label>
+                    <input type="text" id="institusi" placeholder="Contoh: SMA Negeri 1 atau Universitas ABC" required>
+                </div>
+            </form>
+            <div class="alert-message" id="data-alert">Mohon lengkapi semua data.</div>
+            <div class="btn-container">
+                <button class="btn btn-green" onclick="lanjutSoal()">Mulai Kuis</button>
+                <button class="btn secondary" onclick="showHalaman('halaman2')">Kembali</button>
+            </div>
+        </section>
+
+        <section id="halaman4" class="page-container page">
+            <h2 id="judulSoal">Soal Kode Etik</h2>
+            <form id="quizForm">
+                <div class="soal-container" id="soalContainer"></div>
+                <div class="btn-container">
+                    <button type="button" class="btn btn-green" onclick="selesaiQuiz()">Selesai</button>
+                    <button class="btn secondary" onclick="showHalaman('halaman3')">Kembali</button>
+                </div>
+            </form>
+        </section>
+
+        <section id="halaman5" class="page-container page">
+            <h2>Hasil Akhir</h2>
+            <p id="hasilAkhir" class="hasil-akhir"></p>
+            <div class="btn-container">
+                <button class="btn" onclick="ulangi()">Ulangi Lagi</button>
+            </div>
+        </section>
+    </main>
+    
+    <script>
+        const soalGuru = [
+            // ... (Kode array soalGuru tidak berubah)
+            { tanya: "Guru wajib bersikap ... terhadap peserta didik.", opsi: ["Tegas dan adil", "Semaunya sendiri", "Tidak peduli"], jawaban: "Tegas dan adil" },
+            { tanya: "Kode etik guru dibuat untuk ...", opsi: ["Melindungi profesi guru", "Memudahkan liburan guru", "Mengurangi jam kerja"], jawaban: "Melindungi profesi guru" },
+            { tanya: "Guru harus menjaga ... dalam melaksanakan tugasnya.", opsi: ["Martabat dan kehormatan", "Kepentingan pribadi", "Kenyamanan sendiri"], jawaban: "Martabat dan kehormatan" },
+            { tanya: "Etika guru dalam hubungan dengan rekan sejawat adalah ...", opsi: ["Bersaing secara tidak sehat", "Menjalin hubungan kekeluargaan", "Saling menjatuhkan", "Tidak peduli"], jawaban: "Menjalin hubungan kekeluargaan" },
+            { tanya: "Seorang guru menemukan kesalahan siswa. Tindakan yang paling sesuai adalah ...", opsi: ["Memberikan hukuman fisik", "Memberikan teguran dan bimbingan yang mendidik", "Mengabaikan kesalahan", "Melaporkan ke media sosial"], jawaban: "Memberikan teguran dan bimbingan yang mendidik" },
+            { tanya: "Tindakan yang menunjukkan pengembangan profesi guru adalah ...", opsi: ["Mengembangkan mutu profesi", "Menolak pelatihan", "Berhenti belajar", "Mengikuti kurikulum lama"], jawaban: "Mengembangkan mutu profesi" },
+            { tanya: "Guru wajib menjaga ... peserta didik.", opsi: ["Kerahasiaan informasi pribadi", "Kebutuhan finansial", "Masalah keluarga", "Aib pribadi"], jawaban: "Kerahasiaan informasi pribadi" },
+            { tanya: "Etika guru dalam pengelolaan dana kelas adalah ...", opsi: ["Menggunakan untuk keperluan pribadi", "Bersikap jujur", "Mengambil keuntungan", "Tidak melaporkan"], jawaban: "Bersikap jujur" },
+            { tanya: "Sikap yang mencerminkan guru sebagai teladan adalah ...", opsi: ["Berlaku diskriminatif", "Menggunakan kata-kata kasar", "Menunjukkan perilaku yang dapat diteladani", "Membocorkan rahasia"], jawaban: "Menunjukkan perilaku yang dapat diteladani" },
+            { tanya: "Dalam hubungan dengan masyarakat, guru wajib ...", opsi: ["Menjauhi interaksi sosial", "Memberikan pandangan profesional dan religius", "Hanya peduli pada lingkup sekolah", "Mengkritik publik"], jawaban: "Memberikan pandangan profesional dan religius" }
+        ];
+
+        const soalDosen = [
+            // ... (Kode array soalDosen tidak berubah)
+            { tanya: "Dosen wajib menjunjung tinggi ... akademik.", opsi: ["Integritas", "Popularitas", "Kekuasaan"], jawaban: "Integritas" },
+            { tanya: "Kode etik dosen dibuat oleh ...", opsi: ["Organisasi profesi", "Mahasiswa", "Kampus saja"], jawaban: "Organisasi profesi" },
+            { tanya: "Seorang dosen wajib mengembangkan ... secara berkelanjutan.", opsi: ["Kompetensi ilmiah", "Kehidupan pribadi", "Hobi pribadi"], jawaban: "Kompetensi ilmiah" },
+            { tanya: "Etika dosen dalam kebebasan akademik adalah ...", opsi: ["Menyampaikan pendapat tanpa adab", "Menghormati hak kebebasan mimbar akademik", "Mengabaikan adab", "Menggunakan kebebasan untuk menyebar hoaks"], jawaban: "Menghormati hak kebebasan mimbar akademik" },
+            { tanya: "Bagaimana dosen memperlakukan mahasiswa?", opsi: ["Diskriminatif", "Adil dan tanpa diskriminasi", "Menolak bimbingan", "Membocorkan data"], jawaban: "Adil dan tanpa diskriminasi" },
+            { tanya: "Etika dosen dalam penelitian adalah ...", opsi: ["Memanipulasi data", "Menjaga kejujuran dan objektivitas", "Melakukan plagiat", "Menolak publikasi"], jawaban: "Menjaga kejujuran dan objektivitas" },
+            { tanya: "Etika dosen dalam hubungan dengan sesama dosen adalah ...", opsi: ["Menyebarkan gosip", "Menghargai perbedaan pendapat dan menjaga martabat", "Menghindari kolaborasi", "Membicarakan keburukan rekan"], jawaban: "Menghargai perbedaan pendapat dan menjaga martabat" },
+            { tanya: "Dosen dalam pengabdian kepada masyarakat seharusnya ...", opsi: ["Memaksakan program", "Bekerja sama dengan masyarakat", "Melakukan program yang tidak relevan", "Hanya fokus publikasi"], jawaban: "Bekerja sama dengan masyarakat" },
+            { tanya: "Apa yang dilakukan dosen jika menemukan plagiat?", opsi: ["Mendiamkan", "Memberikan sanksi dan edukasi", "Memberikan nilai E tanpa pemberitahuan", "Menyebarkan di media sosial"], jawaban: "Memberikan sanksi dan edukasi" },
+            { tanya: "Sikap integritas dosen ditunjukkan dengan ...", opsi: ["Menerima hadiah", "Bertindak jujur dan objektif", "Mendiskriminasi mahasiswa", "Memaksakan ideologi"], jawaban: "Bertindak jujur dan objektif" }
+        ];
+
+        let profesiDipilih = "";
+        let namaPengguna = "";
+        let institusiPengguna = "";
+
+        function showHalaman(halamanId) {
+            const allPages = document.querySelectorAll('.page-container');
+            allPages.forEach(page => page.classList.remove('active'));
+            document.getElementById(halamanId).style.display = 'block';
+            setTimeout(() => {
+                document.getElementById(halamanId).classList.add('active');
+            }, 10);
+            
+            allPages.forEach(page => {
+                if (page.id !== halamanId) {
+                    page.style.display = 'none';
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const optionCards = document.querySelectorAll('.option-card');
+            optionCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    optionCards.forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    card.querySelector('input[type="radio"]').checked = true;
+                });
+            });
+
+            showHalaman('halaman1');
+        });
+
+        function lanjutDataDiri() {
+            const pilihan = document.querySelector('input[name="profesi"]:checked');
+            if (!pilihan) {
+                document.getElementById("profesi-alert").style.display = "block";
+                return;
+            }
+            document.getElementById("profesi-alert").style.display = "none";
+            profesiDipilih = pilihan.value;
+            showHalaman('halaman3');
+        }
+
+        function lanjutSoal() {
+            const namaInput = document.getElementById("nama").value.trim();
+            const institusiInput = document.getElementById("institusi").value.trim();
+            if (namaInput === "" || institusiInput === "") {
+                document.getElementById("data-alert").style.display = "block";
+                return;
+            }
+            document.getElementById("data-alert").style.display = "none";
+            namaPengguna = namaInput;
+            institusiPengguna = institusiInput;
+            showHalaman4();
+        }
+
+        function showHalaman4() {
+            showHalaman('halaman4');
+            const soalContainer = document.getElementById("soalContainer");
+            soalContainer.innerHTML = "";
+            const soalDipakai = (profesiDipilih === "guru") ? soalGuru : soalDosen;
+            document.getElementById("judulSoal").innerText = `Soal Kode Etik Profesi ${profesiDipilih === "guru" ? "Guru" : "Dosen"}`;
+
+            soalDipakai.forEach((soal, index) => {
+                const div = document.createElement("div");
+                div.classList.add("soal");
+                div.innerHTML = `
+                    <h4>${index + 1}. ${soal.tanya}</h4>
+                    ${soal.opsi.map(op => `
+                        <label>
+                            <input type="radio" name="soal${index}" value="${op}">
+                            ${op}
+                        </label>
+                    `).join("")}
+                `;
+                soalContainer.appendChild(div);
+            });
+        }
+
+        function selesaiQuiz() {
+            const soalDipakai = (profesiDipilih === "guru") ? soalGuru : soalDosen;
+            let skor = 0;
+            soalDipakai.forEach((soal, index) => {
+                const jawaban = document.querySelector(`input[name="soal${index}"]:checked`);
+                if (jawaban && jawaban.value === soal.jawaban) {
+                    skor++;
+                }
+            });
+            const persen = (skor / soalDipakai.length) * 100;
+            showHalaman5(skor, soalDipakai.length, persen);
+        }
+
+        function showHalaman5(skor, totalSoal, persen) {
+            showHalaman('halaman5');
+            const hasilAkhir = document.getElementById("hasilAkhir");
+            let hasilText = "";
+            let profesiText = profesiDipilih === "guru" ? "Guru" : "Dosen";
+            
+            if (persen >= 70) {
+                hasilText = `Selamat, **${namaPengguna}**! 🎉 Anda dinyatakan **LULUS** sebagai ${profesiText} dengan nilai ${skor} dari ${totalSoal} (${persen.toFixed(0)}%).`;
+                hasilAkhir.classList.remove('tidak-lulus');
+                hasilAkhir.classList.add('lulus');
+            } else {
+                hasilText = `Mohon maaf, **${namaPengguna}**. Anda **BELUM LULUS**. Nilai Anda ${skor} dari ${totalSoal} (${persen.toFixed(0)}%).`;
+                hasilAkhir.classList.remove('lulus');
+                hasilAkhir.classList.add('tidak-lulus');
+            }
+            hasilAkhir.innerHTML = hasilText;
+        }
+
+        function ulangi() {
+            document.getElementById('quizForm').reset();
+            document.getElementById('dataDiriForm').reset();
+            const optionCards = document.querySelectorAll('.option-card');
+            optionCards.forEach(c => c.classList.remove('selected'));
+            const radioButtons = document.querySelectorAll('input[type="radio"][name="profesi"]');
+            radioButtons.forEach(radio => radio.checked = false);
+            profesiDipilih = "";
+            namaPengguna = "";
+            institusiPengguna = "";
+            showHalaman('halaman1');
+        }
+    </script>
+</body>
+</html>
